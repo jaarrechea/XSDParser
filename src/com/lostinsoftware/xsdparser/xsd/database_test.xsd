@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="database">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="author"/>
+        <xs:element ref="namespace"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="entity" />
+      </xs:sequence>
+      <xs:attribute name="package-path" use="required"/>
+      <xs:attribute name="auto-namespace-tables" type="xs:boolean" default="true" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author" type="xs:string"/>
+  <xs:element name="namespace" type="xs:string" default="com.lostinsoftware"/>
+  <!-- The entity element represents a table in the database. -->
+  <xs:element name="entity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="column"/>
+        <xs:element minOccurs="0" ref="order"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="uuid" type="xs:boolean"/>
+      <xs:attribute name="local-service" type="xs:boolean" default="true"/>
+      <xs:attribute name="remote-service" type="xs:boolean" default="false"/>
+      <xs:attribute name="cache-enabled" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- The column element represents a column in the database. -->
+  <xs:element name="column">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="type" use="required">
+        <xs:simpleType >
+          <xs:restriction base="xs:string" >
+            <xs:enumeration value="String"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="Date"/>
+            <xs:enumeration value="double"/>
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="Integer"/>
+            <xs:enumeration value="long"/>
+            <xs:enumeration value="short"/>
+            <xs:enumeration value="Collection"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="primary" type="xs:boolean"/>
+      <xs:attribute name="lazy"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    Ordering and sorting of the entities when they are retrieved from the database.
+  -->
+  <xs:element name="order">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="order-column"/>
+      </xs:sequence>
+      <xs:attribute name="by"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- Set the by attribute to "asc" or "desc" to order by ascending or descending. -->
+  <xs:element name="order-column">
+    <xs:complexType mixed="true">
+      <xs:attribute name="name" use="required"/>
+      <xs:attribute name="case-sensitive"/>
+      <xs:attribute name="order-by"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+  
